@@ -4,4 +4,4 @@ project_id = "zvctajbzulhulycokjwk"
 verify_jwt = false
 
 [functions.read-signals]
-verify_jwt = true
+verify_jwt = false

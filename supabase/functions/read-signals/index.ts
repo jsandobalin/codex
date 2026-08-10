@@ -1,9 +1,9 @@
-import { createClient } from 'npm:@supabase/supabase-js@2.95.3';
+import { corsHeaders } from 'npm:@supabase/supabase-js@2.95.3/cors';
+import { createAdminClient, verifyCredentials } from 'npm:@supabase/server@1.4.1/core';
 
-const corsHeaders = {
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+const responseHeaders = {
+  ...corsHeaders,
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Allow-Origin': '*',
   'Content-Type': 'application/json'
 };
 
@@ -26,28 +26,32 @@ type SignalRow = {
 };
 
 function response(payload: Record<string, unknown>, status = 200) {
-  return new Response(JSON.stringify(payload), { headers: corsHeaders, status });
+  return new Response(JSON.stringify(payload), { headers: responseHeaders, status });
 }
 
 function sourceFor(row: SignalRow) {
   return Array.isArray(row.sources) ? row.sources[0] : row.sources;
 }
 
+function bearerToken(request: Request) {
+  const authorization = request.headers.get('Authorization');
+  return authorization?.startsWith('Bearer ') ? authorization.slice('Bearer '.length) : null;
+}
+
 Deno.serve(async (request) => {
-  if (request.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+  if (request.method === 'OPTIONS') return new Response('ok', { headers: responseHeaders });
   if (request.method !== 'GET') return response({ message: 'Method not allowed' }, 405);
 
-  if (!request.headers.get('Authorization')?.startsWith('Bearer ')) {
-    return response({ message: 'Unauthorized' }, 401);
-  }
+  const token = bearerToken(request);
+  if (!token) return response({ message: 'Unauthorized' }, 401);
 
-  const url = Deno.env.get('SUPABASE_URL');
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  if (!url || !serviceRoleKey) return response({ message: 'Server configuration error' }, 500);
+  const { data: auth, error: authError } = await verifyCredentials(
+    { token, apikey: request.headers.get('apikey') },
+    { auth: 'user' }
+  );
+  if (authError || !auth?.userClaims?.sub) return response({ message: 'Unauthorized' }, 401);
 
-  const client = createClient(url, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false }
-  });
+  const client = createAdminClient();
   const { data, error } = await client
     .from('signals')
     .select('external_id, title, evidence, impact_level, impact_summary, action, status_label, status_summary, sources!inner(name, url, published_at)')

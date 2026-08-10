@@ -8,9 +8,14 @@ function requireSupabase() {
 }
 
 export async function currentClaims() {
-  const { data, error } = await requireSupabase().auth.getClaims();
+  const client = requireSupabase();
+  const { data: sessionData, error: sessionError } = await client.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!sessionData.session?.access_token) return null;
+
+  const { data, error } = await client.auth.getClaims();
   if (error) throw error;
-  return data.claims;
+  return data?.claims ?? null;
 }
 
 export async function signIn(email, password) {
