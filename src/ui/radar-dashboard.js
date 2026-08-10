@@ -73,15 +73,20 @@ function operatorItem(signal, index, decision) {
     </li>`;
 }
 
-function dashboardContent(data, selectedId, decisions, refreshing) {
+function dashboardContent(data, selectedId, decisions, refreshing, source) {
   const selected = data.signals.find((signal) => signal.id === selectedId) || data.signals[0];
   const sources = [...new Map(data.signals.map((signal) => [signal.source.name, signal.source])).values()];
+  const remote = source === 'remote';
+  const sourceLabel = remote ? 'Datos remotos · Supabase' : 'Demo local · fixture';
+  const statusText = refreshing
+    ? `Actualizando señales ${remote ? 'remotas' : 'locales'}. Se conserva el ranking actual.`
+    : remote ? 'Señales remotas cargadas desde Supabase.' : 'Datos de demostración locales cargados.';
   return `
     <section class="dashboard-header">
       <div><p class="eyebrow">Inteligencia operativa</p><h1>Ranking de señales</h1><p>Qué cambió, qué importa y qué hacer después.</p></div>
-      <div class="dashboard-tools"><span class="demo-badge">Demo local · fixture</span><button id="refresh-dashboard" type="button" ${refreshing ? 'disabled' : ''}>${refreshing ? 'Actualizando…' : 'Actualizar'}</button></div>
+      <div class="dashboard-tools"><span class="demo-badge">${sourceLabel}</span><button id="refresh-dashboard" type="button" ${refreshing ? 'disabled' : ''}>${refreshing ? 'Actualizando…' : 'Actualizar'}</button></div>
     </section>
-    <p class="sr-status" role="status">${refreshing ? 'Actualizando señales locales. Se conserva el ranking actual.' : 'Datos de demostración locales cargados.'}</p>
+    <p class="sr-status" role="status">${statusText}</p>
     <section class="radar-grid">
       <section class="panel ranking-panel" aria-labelledby="ranking-title">
         <div class="panel-heading"><div><span class="eyebrow">Última señalización</span><h2 id="ranking-title">Señales priorizadas</h2></div><span class="panel-note">${data.signals.length} hallazgos</span></div>
@@ -149,11 +154,12 @@ export function moduleMarkup(moduleName, state) {
 }
 
 export function dashboardMarkup(state) {
-  if (state.status === 'idle' || state.status === 'loading') return `<section class="dashboard-state"><div class="loading-orb"></div><h1>Preparando el radar</h1><p>Cargando el origen de datos local declarado.</p></section>`;
-  if (state.status === 'empty') return `<section class="dashboard-state"><p class="eyebrow">Demo local · fixture</p><h1>No hay señales para este corte</h1><p>El contrato se cargó correctamente, pero no contiene señales disponibles.</p><button type="button" id="retry-dashboard">Reintentar</button></section>`;
-  if (state.status === 'error') return `<section class="dashboard-state"><p class="eyebrow">Origen local no disponible</p><h1>No se pudo cargar el radar</h1><p>${escapeHtml(state.message)}</p><button type="button" id="retry-dashboard">Reintentar</button></section>`;
+  const remote = state.source === 'remote';
+  if (state.status === 'idle' || state.status === 'loading') return `<section class="dashboard-state"><div class="loading-orb"></div><h1>Preparando el radar</h1><p>Cargando el origen de datos ${remote ? 'remoto protegido' : 'local declarado'}.</p></section>`;
+  if (state.status === 'empty') return `<section class="dashboard-state"><p class="eyebrow">${remote ? 'Datos remotos · Supabase' : 'Demo local · fixture'}</p><h1>No hay señales para este corte</h1><p>El contrato se cargó correctamente, pero no contiene señales disponibles.</p><button type="button" id="retry-dashboard">Reintentar</button></section>`;
+  if (state.status === 'error') return `<section class="dashboard-state"><p class="eyebrow">${remote ? 'Origen remoto no disponible' : 'Origen local no disponible'}</p><h1>No se pudo cargar el radar</h1><p>${escapeHtml(state.message)}</p><button type="button" id="retry-dashboard">Reintentar</button></section>`;
   if (state.status === 'unauthorized') return `<section class="dashboard-state"><p class="eyebrow">Acceso restringido</p><h1>No tienes acceso a este radar</h1><p>Inicia sesión con una cuenta autorizada para ver señales privadas.</p><a class="button" href="#/login">Acceder</a></section>`;
-  return dashboardContent(state.data, state.selectedId, state.decisions, state.refreshing);
+  return dashboardContent(state.data, state.selectedId, state.decisions, state.refreshing, state.source);
 }
 
 export function bindDashboard({ root, onSelect, onRefresh, onDecision, onResetDecisions }) {

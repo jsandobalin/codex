@@ -6,6 +6,7 @@ dist/
 coverage/
 .env
 .env.*
+!.env.example
 supabase/functions/.env
 supabase/functions/.env.*
 public/runtime-config.js

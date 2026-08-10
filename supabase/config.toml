@@ -2,3 +2,6 @@ project_id = "zvctajbzulhulycokjwk"
 
 [functions.save-signals]
 verify_jwt = false
+
+[functions.read-signals]
+verify_jwt = true

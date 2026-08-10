@@ -119,7 +119,8 @@ no puede leerlas ni escribirlas. La única vía interna es la Edge Function
 `save-signals`, autenticada con una secret key dedicada llamada `airadar-writer`.
 
 1. Copia `.env.example` a `.env` y proporciona `AI_RADAR_SAVE_SIGNALS_URL` y
-   `AI_RADAR_SAVE_SIGNALS_KEY` desde un almacén de secretos local o CI.
+   `AI_RADAR_SAVE_SIGNALS_KEY` desde un almacén de secretos local o CI. La URL
+   no es sensible; la writer key nunca debe aparecer en archivos versionados.
 2. Valida el contrato antes de una llamada de red:
 
 ```bash
@@ -142,6 +143,12 @@ modernas no son JWT y valida una clave nombrada mediante `apikey`. Las claves
 publishable del navegador siguen limitadas a Supabase Auth en
 `public/runtime-config.js`; una `sb_secret_...` o `service_role` nunca debe estar
 en el navegador, repositorio, URL o logs.
+
+La ruta protegida `#/radar` obtiene las señales persistidas desde la Edge Function
+`read-signals`; el navegador envía únicamente la sesión autenticada y nunca una
+secret key. La función se debe desplegar con la configuración incluida antes de
+usar el origen remoto. La ruta `#/demo` continúa usando el fixture local de forma
+explícita.
 
 ## Demo del dashboard
 

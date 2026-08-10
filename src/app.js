@@ -1,15 +1,21 @@
 import { currentClaims, onAuthChange, signIn, signOut, signUp } from './auth.js';
 import { clearOperatorDecisions, readOperatorDecisions, writeOperatorDecisions } from './data/operator-decision-store.js';
 import { loadRadarFixture } from './data/radar-fixture-client.js';
+import { loadRadarSignals } from './data/radar-supabase-client.js';
 import { currentPath, isProtectedRoute, navigate, routeFor } from './router.js';
+import { supabase } from './supabase-client.js';
 import { bindDashboard, moduleMarkup } from './ui/radar-dashboard.js';
 
 const app = document.querySelector('#app');
 let claims = null;
 let authError = null;
-let dashboard = { status: 'idle', data: null, selectedId: null, decisions: readOperatorDecisions(), refreshing: false };
+let dashboard = { status: 'idle', source: null, data: null, selectedId: null, decisions: readOperatorDecisions(), refreshing: false };
 let dashboardRequest = 0;
 const dashboardPaths = new Set(['/demo', '/radar', '/signals', '/sources', '/reader-model', '/operator']);
+
+function dashboardSource(path) {
+  return path === '/radar' ? 'remote' : 'fixture';
+}
 
 function message(text, type = 'info') {
   return `<p class="message ${type}">${text}</p>`;
@@ -30,6 +36,7 @@ function homePage() {
 
 function dashboardPage(path) {
   const moduleName = path === '/radar' ? 'dashboard' : path.slice(1);
+  const source = dashboardSource(path);
   const links = [
     ['#/demo', 'dashboard', '⌁', 'Radar'],
     ['#/signals', 'signals', '⌁', 'Señales'],
@@ -37,7 +44,8 @@ function dashboardPage(path) {
     ['#/reader-model', 'reader-model', '◌', 'Modelo lector'],
     ['#/operator', 'operator', '◇', 'Modo operador']
   ];
-  return `<div class="dashboard-shell"><aside class="radar-sidebar"><a class="radar-brand" href="#/"><span>◎</span> AI Radar</a><nav aria-label="Secciones del radar">${links.map(([href, name, icon, label]) => `<a class="${name === moduleName ? 'active' : ''}" href="${href}">${icon} <span>${label}</span></a>`).join('')}</nav><div class="sidebar-status"><span class="status-dot"></span><strong>Demo local</strong><small>Decisiones: este navegador</small></div></aside><main class="radar-main">${moduleMarkup(moduleName, dashboard)}</main></div>`;
+  const sourceLabel = source === 'remote' ? 'Supabase protegido' : 'Demo local';
+  return `<div class="dashboard-shell"><aside class="radar-sidebar"><a class="radar-brand" href="#/"><span>◎</span> AI Radar</a><nav aria-label="Secciones del radar">${links.map(([href, name, icon, label]) => `<a class="${name === moduleName ? 'active' : ''}" href="${href}">${icon} <span>${label}</span></a>`).join('')}</nav><div class="sidebar-status"><span class="status-dot"></span><strong>${sourceLabel}</strong><small>Decisiones: este navegador</small></div></aside><main class="radar-main">${moduleMarkup(moduleName, dashboard)}</main></div>`;
 }
 
 function forcedDashboardState() {
@@ -54,29 +62,36 @@ function render() {
   }
   app.innerHTML = path === '/login' ? loginPage() : dashboardPaths.has(path) ? dashboardPage(path) : homePage();
   bindPageEvents();
-  if (dashboardPaths.has(path) && dashboard.status === 'idle') loadDashboard();
+  if (dashboardPaths.has(path) && dashboard.source !== dashboardSource(path)) loadDashboard();
 }
 
 async function loadDashboard() {
+  const source = dashboardSource(currentPath());
   const state = forcedDashboardState();
   if (state) {
-    dashboard = state === 'error' ? { ...dashboard, status: 'error', message: 'El estado de prueba simula un fallo recuperable del origen local.' } : { ...dashboard, status: state };
+    dashboard = state === 'error'
+      ? { ...dashboard, source, status: 'error', message: 'El estado de prueba simula un fallo recuperable del origen configurado.' }
+      : { ...dashboard, source, status: state };
     render();
     return;
   }
   const request = ++dashboardRequest;
-  const hasContent = dashboard.status === 'ready';
-  dashboard = hasContent ? { ...dashboard, refreshing: true } : { ...dashboard, status: 'loading' };
+  const hasContent = dashboard.status === 'ready' && dashboard.source === source;
+  dashboard = hasContent
+    ? { ...dashboard, source, refreshing: true }
+    : { ...dashboard, source, status: 'loading', data: null, selectedId: null, refreshing: false };
   render();
   try {
-    const data = await loadRadarFixture();
+    const data = source === 'remote' ? await loadRadarSignals({ client: supabase }) : await loadRadarFixture();
     if (request !== dashboardRequest) return;
     dashboard = data.signals.length === 0
-      ? { status: 'empty', data: null, selectedId: null, decisions: {}, refreshing: false }
-      : { status: 'ready', data, selectedId: dashboard.selectedId || data.signals[0].id, decisions: dashboard.decisions, refreshing: false };
+      ? { status: 'empty', source, data: null, selectedId: null, decisions: dashboard.decisions, refreshing: false }
+      : { status: 'ready', source, data, selectedId: dashboard.selectedId || data.signals[0].id, decisions: dashboard.decisions, refreshing: false };
   } catch (error) {
     if (request !== dashboardRequest) return;
-    dashboard = { ...dashboard, status: 'error', message: error.message, refreshing: false };
+    dashboard = error.status === 401 || error.status === 403
+      ? { ...dashboard, source, status: 'unauthorized', refreshing: false }
+      : { ...dashboard, source, status: 'error', message: error.message, refreshing: false };
   }
   render();
 }
