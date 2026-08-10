@@ -1,10 +1,14 @@
 .DS_Store
 node_modules/
+__pycache__/
 .pnpm-store/
 dist/
 coverage/
 .env
 .env.*
+supabase/functions/.env
+supabase/functions/.env.*
+public/runtime-config.js
 .airadar/
 data/searches/
 data/reports/
@@ -12,6 +16,7 @@ snapshots/weekly/
 config/sources.json
 frameio/
 recordings/
+artifacts/
 *.log
 *.sqlite
 *.db

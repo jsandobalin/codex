@@ -1,0 +1,4 @@
+project_id = "zvctajbzulhulycokjwk"
+
+[functions.save-signals]
+verify_jwt = false

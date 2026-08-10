@@ -1,0 +1,117 @@
+{
+  "contract": {
+    "name": "ai-radar-daily-signals",
+    "version": "1.0.0"
+  },
+  "date": "2026-08-09",
+  "generatedAt": "2026-08-09T21:40:06Z",
+  "query": {
+    "topic": "noticias recientes de inteligencia artificial",
+    "requestedCount": 5,
+    "language": "es",
+    "criteria": [
+      "recency",
+      "verifiable evidence",
+      "impact",
+      "actionability",
+      "signal status"
+    ]
+  },
+  "signals": [
+    {
+      "id": "2026-08-06-openai-apa-youth-ai",
+      "title": "Alianza OpenAI-APA para IA y salud mental juvenil",
+      "source": {
+        "name": "OpenAI",
+        "url": "https://openai.com/index/openai-and-apa-partner-to-advance-responsible-ai/",
+        "publishedAt": "2026-08-06"
+      },
+      "evidence": "OpenAI y la American Psychological Association anunciaron trabajo conjunto para desarrollar recursos y salvaguardas basadas en evidencia sobre el uso de IA por jóvenes.",
+      "impact": {
+        "level": "medium-high",
+        "summary": "Eleva el estándar de diseño y seguridad para productos de IA que puedan utilizar menores de edad."
+      },
+      "action": "Incorporar evaluación de riesgos, controles parentales y vías de derivación a apoyo humano si el producto llega a menores.",
+      "status": {
+        "label": "announced",
+        "summary": "Colaboración anunciada; los recursos y salvaguardas se desarrollarán progresivamente."
+      }
+    },
+    {
+      "id": "2026-07-30-gpt-56-price-performance",
+      "title": "GPT-5.6 reduce el coste de agentes",
+      "source": {
+        "name": "OpenAI",
+        "url": "https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/",
+        "publishedAt": "2026-07-30"
+      },
+      "evidence": "OpenAI redujo el precio de GPT-5.6 Luna un 80% y el de Terra un 20%, e introdujo Fast mode para Sol en la API.",
+      "impact": {
+        "level": "high",
+        "summary": "Hace económicamente viables flujos agentivos de alto volumen y permite optimizar coste, velocidad y capacidad por tarea."
+      },
+      "action": "Medir calidad y coste de las tareas repetibles, y derivar las bien especificadas a modelos más eficientes.",
+      "status": {
+        "label": "launched",
+        "summary": "Cambios de precio y rendimiento disponibles desde el 30 de julio de 2026."
+      }
+    },
+    {
+      "id": "2026-07-16-hugging-face-agent-intrusion",
+      "title": "Hugging Face reporta una intrusión impulsada por agentes de IA",
+      "source": {
+        "name": "Hugging Face",
+        "url": "https://huggingface.co/blog/security-incident-july-2026",
+        "publishedAt": "2026-07-16"
+      },
+      "evidence": "Hugging Face informó acceso no autorizado a datasets internos y credenciales; corrigió las rutas de ejecución afectadas, reconstruyó nodos y rotó secretos.",
+      "impact": {
+        "level": "high",
+        "summary": "Los pipelines de datos y los entornos de ejecución de agentes son una superficie de ataque prioritaria."
+      },
+      "action": "Rotar tokens, limitar loaders que ejecuten código remoto, aislar sandboxes y auditar permisos de agentes.",
+      "status": {
+        "label": "under investigation",
+        "summary": "El incidente fue mitigado; la evaluación del alcance y la investigación continúan."
+      }
+    },
+    {
+      "id": "2026-07-07-meta-muse-image-video",
+      "title": "Meta lanza Muse Image y adelanta Muse Video",
+      "source": {
+        "name": "Meta AI",
+        "url": "https://ai.meta.com/blog/introducing-muse-image-muse-video-msl/",
+        "publishedAt": "2026-07-07"
+      },
+      "evidence": "Muse Image ofrece edición precisa, composición con múltiples referencias y una marca de procedencia; Muse Video se presentó como vista previa.",
+      "impact": {
+        "level": "medium-high",
+        "summary": "Amplía las opciones para herramientas de creación visual y refuerza la necesidad de trazabilidad del contenido generado."
+      },
+      "action": "Probar Muse Image en flujos creativos e incorporar señales de procedencia al diseñar productos de contenido generado.",
+      "status": {
+        "label": "launched",
+        "summary": "Muse Image está disponible; Muse Video permanece en vista previa."
+      }
+    },
+    {
+      "id": "2026-06-30-claude-sonnet-5",
+      "title": "Anthropic lanza Claude Sonnet 5 para flujos agentivos",
+      "source": {
+        "name": "Anthropic",
+        "url": "https://www.anthropic.com/news/claude-sonnet-5",
+        "publishedAt": "2026-06-30"
+      },
+      "evidence": "Anthropic presentó Claude Sonnet 5 con planificación, uso de herramientas y ejecución autónoma; está disponible en Claude Code y la API con precio introductorio hasta el 31 de agosto de 2026.",
+      "impact": {
+        "level": "high",
+        "summary": "Amplía las opciones de coste-rendimiento para agentes de código y automatizaciones de varios pasos."
+      },
+      "action": "Evaluar Claude Sonnet 5 en tareas agentivas con un conjunto de pruebas propio antes de migrar flujos de producción.",
+      "status": {
+        "label": "launched",
+        "summary": "Disponible en Claude, Claude Code y la API desde el 30 de junio de 2026."
+      }
+    }
+  ]
+}

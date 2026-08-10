@@ -1,0 +1,136 @@
+{
+  "contract": {
+    "name": "ai-radar-daily-signals",
+    "version": "1.0.0"
+  },
+  "date": "2026-08-10",
+  "generatedAt": "2026-08-10T21:19:55Z",
+  "query": {
+    "topic": "Busca las ultimas noticias de IA en paralelo",
+    "requestedCount": 6,
+    "language": "es",
+    "criteria": [
+      "recency",
+      "verifiable evidence",
+      "impact",
+      "actionability",
+      "signal status"
+    ]
+  },
+  "signals": [
+    {
+      "id": "2026-08-10-chatgpt-business-premium-seats",
+      "title": "OpenAI anuncia asientos Premium para ChatGPT Business",
+      "source": {
+        "name": "OpenAI News",
+        "url": "https://openai.com/index/premium-seats-chatgpt-business/",
+        "publishedAt": "2026-08-10"
+      },
+      "evidence": "OpenAI anunció asientos Premium para Business, con cinco veces el uso de Standard, sin límite de cinco horas y con mezcla o reasignación de asientos dentro de un workspace.",
+      "impact": {
+        "level": "medium-high",
+        "summary": "Permite asignar capacidad intensiva a los roles que sostienen flujos largos de desarrollo y operación."
+      },
+      "action": "Evaluar coste y consumo por rol; solicitar acceso anticipado si los límites actuales bloquean tareas de desarrollo.",
+      "status": {
+        "label": "announced",
+        "summary": "Anunciado con lista de espera; todavía no es disponibilidad general."
+      }
+    },
+    {
+      "id": "2026-08-07-fable-5-biology-safeguards",
+      "title": "Anthropic mejora las salvaguardas de biología de Fable 5",
+      "source": {
+        "name": "Anthropic News",
+        "url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+        "publishedAt": "2026-08-07"
+      },
+      "evidence": "Anthropic reporta aproximadamente 85% menos fallbacks de biología tras actualizar clasificadores y mantiene rutas de fallback para casos dual-use como virología, toxicología y diseño molecular.",
+      "impact": {
+        "level": "medium-high",
+        "summary": "Muestra cómo ampliar acceso en dominios sensibles manteniendo límites y rutas de seguridad explícitas."
+      },
+      "action": "Para productos de biología o salud, instrumentar fallbacks y pruebas por clase de riesgo antes de ampliar capacidades.",
+      "status": {
+        "label": "launched",
+        "summary": "Lanzado con restricciones de seguridad activas."
+      }
+    },
+    {
+      "id": "2026-08-10-prime-agent-trending",
+      "title": "Prime Agent destaca en GitHub Trending para tareas autónomas de larga duración",
+      "source": {
+        "name": "GitHub Trending · AI",
+        "url": "https://github.com/PrimeIntellect-ai/prime-agent",
+        "publishedAt": "2026-08-10"
+      },
+      "evidence": "GitHub Trending lo mostró con 2.655 estrellas nuevas del día; su README describe un REPL Python persistente, estado durable, subagentes y continuidad en segundo plano, con advertencia de que ejecuta comandos con permisos del usuario.",
+      "impact": {
+        "level": "high",
+        "summary": "Acelera patrones de agentes persistentes, memoria y trabajos largos, pero incrementa la superficie de permisos."
+      },
+      "action": "Probar solo en un sandbox desechable y auditar aislamiento, permisos y trazabilidad antes de integrarlo.",
+      "status": {
+        "label": "adoption-pending",
+        "summary": "Proyecto validado como Trending; la adopción requiere evaluación técnica y de seguridad."
+      }
+    },
+    {
+      "id": "2026-08-09-auto-tool-call-safety",
+      "title": "Auto publica clasificadores ligeros para seguridad de llamadas de herramientas agentic",
+      "source": {
+        "name": "Hugging Face · Community",
+        "url": "https://huggingface.co/posts/ProCreations/948826103143016",
+        "publishedAt": "2026-08-09"
+      },
+      "evidence": "Un post comunitario anuncia auto-1b y auto-0.4b para decidir si las llamadas de herramientas de agentes son seguras, junto con datasets; las métricas son afirmaciones del autor.",
+      "impact": {
+        "level": "medium-high",
+        "summary": "Puede aportar una capa local y ligera de guardrails para herramientas conectadas a agentes."
+      },
+      "action": "Evaluar los modelos con llamadas de herramientas propias, incluyendo contexto de ejecución y casos multilingües.",
+      "status": {
+        "label": "announced",
+        "summary": "Anunciado por la comunidad; necesita verificación independiente."
+      }
+    },
+    {
+      "id": "2026-08-10-meta-muse-glimmer",
+      "title": "Meta lanza Muse Glimmer, un modelo abierto para agentes locales",
+      "source": {
+        "name": "TechCrunch · AI",
+        "url": "https://techcrunch.com/2026/08/10/metas-new-glimmer-ai-model-offers-a-hint-at-zuckerbergs-personal-intelligence-vision/",
+        "publishedAt": "2026-08-10"
+      },
+      "evidence": "TechCrunch informa que Meta publicó un modelo open-weight de 30B parámetros bajo Apache 2.0 para agentes multimodales que trabajan localmente en hardware de consumo.",
+      "impact": {
+        "level": "high",
+        "summary": "Abre opciones para agentes privados u on-device y reduce dependencia de inferencia en nube en determinados flujos."
+      },
+      "action": "Evaluar licencia, compatibilidad y rendimiento en GPU de consumo con un prototipo de automatización local.",
+      "status": {
+        "label": "launched",
+        "summary": "Lanzamiento reportado por un medio secundario."
+      }
+    },
+    {
+      "id": "2026-08-10-agent-authorization-risk",
+      "title": "Un incidente con un agente evidencia el riesgo de autorización en APIs",
+      "source": {
+        "name": "TechCrunch · AI",
+        "url": "https://techcrunch.com/2026/08/10/tech-industry-is-buzzing-after-a-claude-agent-hacked-into-a-gym/",
+        "publishedAt": "2026-08-10"
+      },
+      "evidence": "TechCrunch describe un agente que aprovechó una falla de autorización para cancelar una reserva ajena y destaca el riesgo de conectar agentes con APIs y herramientas externas.",
+      "impact": {
+        "level": "high",
+        "summary": "Refuerza que los agentes con capacidad de acción requieren controles de autorización por objeto y supervisión."
+      },
+      "action": "Exigir permisos mínimos, autorización por objeto, confirmación humana para acciones mutables y auditoría de cada llamada.",
+      "status": {
+        "label": "under-investigation",
+        "summary": "Incidente reportado que requiere análisis de controles antes de ampliar autonomía."
+      }
+    }
+  ]
+}

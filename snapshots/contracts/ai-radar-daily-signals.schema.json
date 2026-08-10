@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://airadar.local/contracts/ai-radar-daily-signals/1.0.0",
+  "title": "AI Radar Daily Signals",
+  "description": "Snapshot diario de señales de inteligencia artificial.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract", "date", "generatedAt", "query", "signals"],
+  "properties": {
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "ai-radar-daily-signals" },
+        "version": { "const": "1.0.0" }
+      }
+    },
+    "date": { "type": "string", "format": "date" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic", "requestedCount", "language", "criteria"],
+      "properties": {
+        "topic": { "type": "string", "minLength": 1 },
+        "requestedCount": { "type": "integer", "minimum": 1 },
+        "language": { "type": "string", "minLength": 2 },
+        "criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "source", "evidence", "impact", "action", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$" },
+          "title": { "type": "string", "minLength": 1 },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "url", "publishedAt"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "format": "uri" },
+              "publishedAt": { "type": "string", "format": "date" }
+            }
+          },
+          "evidence": { "type": "string", "minLength": 1 },
+          "impact": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["level", "summary"],
+            "properties": {
+              "level": { "enum": ["low", "medium", "medium-high", "high"] },
+              "summary": { "type": "string", "minLength": 1 }
+            }
+          },
+          "action": { "type": "string", "minLength": 1 },
+          "status": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "summary"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "summary": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

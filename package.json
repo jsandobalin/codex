@@ -1,0 +1,15 @@
+{
+  "name": "ai-radar",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate:snapshot": "node --env-file-if-exists=.env scripts/validate-snapshot.js",
+    "save:signals": "node --env-file-if-exists=.env scripts/save-signals.js"
+  },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1"
+  }
+}
